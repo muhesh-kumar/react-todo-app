@@ -6,7 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
 import Todo from './componenets/Todo';
 import db from './firebase';
-import { collection, getDocs, setDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, setDoc, addDoc, doc } from 'firebase/firestore';
 import { query, orderBy, limit } from 'firebase/firestore';
 
 const App = () => {
@@ -22,7 +22,7 @@ const App = () => {
       const querySnapshot = await getDocs(q);
       const todos = [];
       querySnapshot.forEach((doc) => {
-        todos.push(doc.data().todo);
+        todos.push({ id: doc.id, todo: doc.data().todo });
       });
       setTodos(todos);
     };
@@ -33,16 +33,18 @@ const App = () => {
   const addTodo = (event) => {
     event.preventDefault(); // don't refresh the page when you submit
 
+    const currentTime = new Date().getTime();
+
     const addTodoToFireStore = async () => {
       // Add a new document in collection "todos" with a name of ${input}
-      await setDoc(doc(db, 'todos', input), {
+      await addDoc(collection(db, 'todos'), {
         todo: input,
-        timestamp: new Date().getTime(),
+        timestamp: currentTime,
       });
     };
 
     addTodoToFireStore();
-    setTodos([...todos, input]);
+    setTodos([...todos, { todo: input, timestamp: currentTime }]);
     setInput(''); // clear the input field afte submitting
   };
 
@@ -70,7 +72,7 @@ const App = () => {
       </form>
       <ul>
         {todos.map((todo) => (
-          <Todo text={todo} />
+          <Todo todo={todo} />
         ))}
       </ul>
     </div>
