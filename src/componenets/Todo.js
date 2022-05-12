@@ -56,7 +56,7 @@ const Todo = ({ todo }) => {
         <DeleteForeverIcon
           onClick={async (event) => {
             // delete the todo from the database
-            await deleteDoc(doc(db, 'todos', todo.todo));
+            await deleteDoc(doc(db, 'todos', todo.id));
           }}
         />
       </List>

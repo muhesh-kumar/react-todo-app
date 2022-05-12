@@ -6,8 +6,8 @@ import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
 import Todo from './componenets/Todo';
 import db from './firebase';
-import { collection, getDocs, setDoc, addDoc, doc } from 'firebase/firestore';
-import { query, orderBy, limit } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { query, orderBy } from 'firebase/firestore';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
